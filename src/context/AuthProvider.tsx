@@ -1,5 +1,5 @@
-import { useState, useContext, ReactNode } from 'react'
-import { AuthContext, AuthContextType, User } from './AuthContext'
+import { useState, useContext, type ReactNode } from 'react'
+import { AuthContext, type AuthContextType, type User } from './AuthContext'
 
 interface AuthProviderProps {
   children: ReactNode
@@ -7,7 +7,7 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null)
-  const [isPending, setIsPending] = useState<boolean>(false)
+  const [isPending] = useState<boolean>(false)
 
   const logout = async () => {
     setUser(null)
