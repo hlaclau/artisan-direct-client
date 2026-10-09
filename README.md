@@ -67,7 +67,7 @@ Tests live next to the code as `*.test.tsx` and run in jsdom. Jest-dom matchers 
 
 ## CI
 
-GitHub Actions runs `mise run ci` on every Pull Request and on `master`. Run it locally before pushing to catch failures early.
+GitHub Actions runs lint, format, typecheck, test and build as parallel jobs on every Pull Request and on `master`. Run `mise run ci` locally to run them all before pushing.
 
 ## Links
 
