@@ -1,46 +1,23 @@
 import { useState, type FormEvent } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { Link } from 'react-router-dom'
 
 export function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-
-  const { login } = useAuth()
-  const navigate = useNavigate()
-  const location = useLocation()
-
-  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/'
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
-    setError('')
-
-    if (!email || !password) {
-      setError('Une erreur est survenue lors de la connexion.')
-      return
-    }
-
-    login(email)
-    navigate(from, { replace: true })
+    // Méthode vide : action en attente du branchement du back-end
   }
 
   const handleGoogleLogin = () => {
-    login('user.google@example.com')
-    navigate(from, { replace: true })
+    // Méthode vide : action en attente du branchement du back-end
   }
 
   return (
     <div className="flex min-h-[calc(100vh-73px)] items-center justify-center bg-stone-50 p-4">
       <div className="w-full max-w-md rounded-xl border border-stone-200 bg-white p-6 shadow-sm">
         <h1 className="mb-6 text-2xl font-bold text-stone-900">Connexion</h1>
-
-        {error && (
-          <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600 border border-red-200">
-            {error}
-          </div>
-        )}
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
@@ -58,7 +35,7 @@ export function LoginPage() {
           </div>
 
           <div>
-            <label htmlFor="password font-medium text-stone-700" className="mb-1 block text-sm">
+            <label htmlFor="password" className="mb-1 block text-sm font-medium text-stone-700">
               Mot de passe
             </label>
             <input
