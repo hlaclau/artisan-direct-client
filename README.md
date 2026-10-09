@@ -1,6 +1,6 @@
 # ArtisansDirect – Client
 
-> **Fictional school project** for the *Front/Back Coordination* course at Ynov. The assignment requires the project to be split into two repositories: this one (front-end) and [artisan-direct-api](https://github.com/hlaclau/artisan-direct-api) (back-end).
+> **Fictional school project** for the _Front/Back Coordination_ course at Ynov. The assignment requires the project to be split into two repositories: this one (front-end) and [artisan-direct-api](https://github.com/hlaclau/artisan-direct-api) (back-end).
 
 Front-end of **ArtisansDirect**, a platform connecting clients with craftspeople: artisan search, service requests, quotes, scheduling, payment and reviews.
 
