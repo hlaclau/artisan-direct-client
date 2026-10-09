@@ -1,36 +1,31 @@
-import { createContext, type ReactNode } from 'react'
-import { authClient, useSession } from '../lib/auth-client'
+import { useState, useContext, ReactNode } from 'react'
+import { AuthContext, AuthContextType, User } from './AuthContext'
 
-interface User {
-  id: string
-  email: string
-  name: string
-  image?: string | null
+interface AuthProviderProps {
+  children: ReactNode
 }
 
-interface AuthContextType {
-  user: User | null
-  isPending: boolean
-  logout: () => Promise<void>
-}
-
-export const AuthContext = createContext<AuthContextType | null>(null)
-
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const { data: session, isPending } = useSession()
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [user, setUser] = useState<User | null>(null)
+  const [isPending, setIsPending] = useState<boolean>(false)
 
   const logout = async () => {
-    await authClient.signOut()
+    setUser(null)
   }
 
-  const user = session?.user
-    ? {
-        id: session.user.id,
-        email: session.user.email,
-        name: session.user.name,
-        image: session.user.image,
-      }
-    : null
+  const value: AuthContextType = {
+    user,
+    isPending,
+    logout,
+  }
 
-  return <AuthContext.Provider value={{ user, isPending, logout }}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+}
+
+export const useAuth = () => {
+  const context = useContext(AuthContext)
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider')
+  }
+  return context
 }
