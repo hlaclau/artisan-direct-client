@@ -1,19 +1,32 @@
-import { useState } from 'react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { Header } from './components/Header'
+import { ProtectedRoute } from './components/ProtectedRoute'
+import { AuthProvider } from './context/AuthContext'
+import { DashboardPage } from './pages/DashboardPage'
+import { HomePage } from './pages/HomePage'
+import { LoginPage } from './pages/LoginPage'
+import { RegisterPage } from './pages/RegisterPage'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-stone-50 text-stone-900">
-      <h1 className="text-4xl font-bold">ArtisansDirect</h1>
-      <button
-        type="button"
-        className="rounded-lg bg-stone-900 px-4 py-2 text-white hover:bg-stone-700"
-        onClick={() => setCount((count) => count + 1)}
-      >
-        Count is {count}
-      </button>
-    </main>
+    <AuthProvider>
+      <BrowserRouter>
+        <Header />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   )
 }
 
