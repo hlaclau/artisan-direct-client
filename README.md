@@ -4,9 +4,70 @@
 
 Front-end of **ArtisansDirect**, a platform connecting clients with craftspeople: artisan search, service requests, quotes, scheduling, payment and reviews.
 
-This repository contains the web application.
+## Stack
 
-> The tech stack has not been chosen yet; setup instructions will come with the tooling setup.
+- [Bun](https://bun.sh) – runtime and package manager
+- [React](https://react.dev) + [Vite](https://vite.dev) + TypeScript
+- [Tailwind CSS v4](https://tailwindcss.com)
+- [Vitest](https://vitest.dev) + [Testing Library](https://testing-library.com)
+- [Oxlint](https://oxc.rs) (lint) and [Prettier](https://prettier.io) (format)
+- [Lefthook](https://lefthook.dev) + [commitlint](https://commitlint.js.org) (git hooks)
+- [mise](https://mise.jdx.dev) – tool versions and tasks
+
+## Getting started
+
+1. Install [mise](https://mise.jdx.dev/getting-started.html)
+2. Clone the repository and install everything:
+
+```sh
+git clone git@github.com:hlaclau/artisan-direct-client.git
+cd artisan-direct-client
+mise trust
+mise install      # installs the pinned Bun version
+mise run install  # installs dependencies and git hooks
+```
+
+3. Start the dev server:
+
+```sh
+mise run dev
+```
+
+The app runs on http://localhost:5173.
+
+## Tasks
+
+Run `mise tasks` to list them all.
+
+| Command               | Description                                    |
+| --------------------- | ---------------------------------------------- |
+| `mise run install`    | Install dependencies and git hooks             |
+| `mise run dev`        | Start the dev server                           |
+| `mise run build`      | Type-check and build for production            |
+| `mise run lint`       | Lint with oxlint                               |
+| `mise run lint:fix`   | Lint and auto-fix                              |
+| `mise run fmt`        | Format with Prettier                           |
+| `mise run fmt:check`  | Check formatting                               |
+| `mise run typecheck`  | Type-check with tsc                            |
+| `mise run test`       | Run tests once                                 |
+| `mise run test:watch` | Run tests in watch mode                        |
+| `mise run check`      | Lint + format check                            |
+| `mise run ci`         | Lint, format check, typecheck, tests and build |
+
+## Git hooks
+
+Installed by `mise run install` through Lefthook:
+
+- **pre-commit**: lints and formats staged files (fixes are re-staged automatically)
+- **commit-msg**: rejects messages that don't follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
+
+## Tests
+
+Tests live next to the code as `*.test.tsx` and run in jsdom. Jest-dom matchers (`toBeInTheDocument`, `toHaveTextContent`, …) are available via `src/test/setup.ts`.
+
+## CI
+
+GitHub Actions runs `mise run ci` on every Pull Request and on `master`. Run it locally before pushing to catch failures early.
 
 ## Links
 
