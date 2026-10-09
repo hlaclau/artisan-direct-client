@@ -1,9 +1,19 @@
 import { render, screen } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import App from './App'
 
 describe('App', () => {
-  it('renders home page title', () => {
+  beforeEach(() => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => null,
+      }),
+    )
+  })
+
+  it("affiche le titre de la page d'accueil", () => {
     render(<App />)
     expect(screen.getByText(/Page d'accueil/i)).toBeInTheDocument()
   })
