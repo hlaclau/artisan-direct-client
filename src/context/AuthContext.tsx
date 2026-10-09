@@ -1,27 +1,36 @@
-import { createContext, useState, type ReactNode } from 'react'
+import { createContext, type ReactNode } from 'react'
+import { authClient, useSession } from '../lib/auth-client'
 
 interface User {
+  id: string
   email: string
+  name: string
+  image?: string | null
 }
 
 interface AuthContextType {
   user: User | null
-  login: (email: string) => Promise<void>
+  isPending: boolean
   logout: () => Promise<void>
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
-
-  const login = async (email: string) => {
-    setUser({ email })
-  }
+  const { data: session, isPending } = useSession()
 
   const logout = async () => {
-    setUser(null)
+    await authClient.signOut()
   }
 
-  return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>
+  const user = session?.user
+    ? {
+        id: session.user.id,
+        email: session.user.email,
+        name: session.user.name,
+        image: session.user.image,
+      }
+    : null
+
+  return <AuthContext.Provider value={{ user, isPending, logout }}>{children}</AuthContext.Provider>
 }
