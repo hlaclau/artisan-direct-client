@@ -32,3 +32,19 @@ run = "bunx prettier --check ."
 [tasks.check]
 description = "Run lint and format checks"
 depends = ["lint", "fmt:check"]
+
+[tasks.typecheck]
+description = "Type-check with tsc"
+run = "bunx tsc -b"
+
+[tasks.test]
+description = "Run tests once"
+run = "bunx vitest run"
+
+[tasks."test:watch"]
+description = "Run tests in watch mode"
+run = "bunx vitest"
+
+[tasks.ci]
+description = "Run every CI check"
+depends = ["lint", "fmt:check", "typecheck", "test", "build"]
