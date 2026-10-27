@@ -1,22 +1,28 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
-import { describe, expect, it, vi } from 'vitest'
-import { AuthContext } from '../context/AuthContext'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { LoginPage } from './LoginPage'
 
-function setup(login: (email: string, password: string) => Promise<void>) {
+const { signInEmail, signInSocial } = vi.hoisted(() => ({
+  signInEmail: vi.fn(),
+  signInSocial: vi.fn(),
+}))
+
+vi.mock('../lib/auth-client', () => ({
+  authClient: { signIn: { email: signInEmail, social: signInSocial } },
+}))
+
+function setup() {
   render(
-    <AuthContext.Provider value={{ user: null, login, logout: vi.fn() }}>
-      <MemoryRouter
-        initialEntries={[{ pathname: '/login', state: { from: { pathname: '/dashboard' } } }]}
-      >
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/dashboard" element={<p>Dashboard</p>} />
-        </Routes>
-      </MemoryRouter>
-    </AuthContext.Provider>,
+    <MemoryRouter
+      initialEntries={[{ pathname: '/login', state: { from: { pathname: '/dashboard' } } }]}
+    >
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/dashboard" element={<p>Dashboard</p>} />
+      </Routes>
+    </MemoryRouter>,
   )
 }
 
@@ -27,15 +33,30 @@ async function fillAndSubmit() {
 }
 
 describe('LoginPage', () => {
+  beforeEach(() => vi.clearAllMocks())
+
   it('redirects to the initially requested page after login', async () => {
-    setup(vi.fn().mockResolvedValue(undefined))
+    signInEmail.mockResolvedValue({ error: null })
+    setup()
     await fillAndSubmit()
     expect(await screen.findByText('Dashboard')).toBeInTheDocument()
+    expect(signInEmail).toHaveBeenCalledWith({ email: 'a@b.fr', password: 'secret' })
   })
 
-  it('shows a generic error when login fails', async () => {
-    setup(vi.fn().mockRejectedValue(new Error('boom')))
+  it('shows an error when credentials are rejected', async () => {
+    signInEmail.mockResolvedValue({ error: { message: 'Invalid' } })
+    setup()
     await fillAndSubmit()
-    expect(await screen.findByRole('alert')).toHaveTextContent('Email ou mot de passe incorrect.')
+    expect(await screen.findByText(/Identifiants incorrects/)).toBeInTheDocument()
+  })
+
+  it('starts the Google sign-in with the requested page as callback', async () => {
+    signInSocial.mockResolvedValue({})
+    setup()
+    await userEvent.click(screen.getByRole('button', { name: 'Continuer avec Google' }))
+    expect(signInSocial).toHaveBeenCalledWith({
+      provider: 'google',
+      callbackURL: `${window.location.origin}/dashboard`,
+    })
   })
 })
