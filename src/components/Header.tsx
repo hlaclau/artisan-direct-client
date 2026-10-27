@@ -19,6 +19,9 @@ export function Header() {
         {user ? (
           <div className="flex items-center gap-4">
             <span className="text-sm text-stone-600">{user.email}</span>
+            <Link to="/account" className="text-sm font-medium text-stone-700 hover:text-stone-950">
+              Mon compte
+            </Link>
             <button
               type="button"
               onClick={handleLogout}

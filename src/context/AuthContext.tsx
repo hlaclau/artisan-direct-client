@@ -2,6 +2,9 @@ import { createContext, useState, type ReactNode } from 'react'
 
 interface User {
   email: string
+  firstName?: string
+  lastName?: string
+  provider: 'email' | 'google'
 }
 
 interface AuthContextType {
@@ -16,7 +19,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
 
   const login = async (email: string) => {
-    setUser({ email })
+    setUser({ email, provider: 'email' })
   }
 
   const logout = async () => {
