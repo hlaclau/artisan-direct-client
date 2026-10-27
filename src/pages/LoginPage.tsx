@@ -1,13 +1,26 @@
 import { useState, type FormEvent } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/useAuth'
 
 export function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const { login } = useAuth()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const redirectTo =
+    (location.state as { from?: { pathname: string } } | null)?.from?.pathname ?? '/'
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    // Méthode vide : action en attente du branchement du back-end
+    setError('')
+    try {
+      await login(email, password)
+      navigate(redirectTo, { replace: true })
+    } catch {
+      setError('Email ou mot de passe incorrect.')
+    }
   }
 
   const handleGoogleLogin = () => {
@@ -47,6 +60,12 @@ export function LoginPage() {
               required
             />
           </div>
+
+          {error && (
+            <p role="alert" className="text-sm text-red-600">
+              {error}
+            </p>
+          )}
 
           <button
             type="submit"

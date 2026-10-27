@@ -6,7 +6,7 @@ interface User {
 
 interface AuthContextType {
   user: User | null
-  login: (email: string) => Promise<void>
+  login: (email: string, password: string) => Promise<void>
   logout: () => Promise<void>
 }
 
@@ -15,7 +15,7 @@ export const AuthContext = createContext<AuthContextType | null>(null)
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
 
-  const login = async (email: string) => {
+  const login = async (email: string, _password: string) => {
     setUser({ email })
   }
 
