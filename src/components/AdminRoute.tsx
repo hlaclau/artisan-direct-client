@@ -14,6 +14,8 @@ export function AdminRoute({ children }: { children: ReactNode }) {
     return <Navigate to="/login" state={{ from: location }} replace />
   }
 
+  // `user.role` est fourni par le back (ADP-126). Tant qu'il n'est pas exposé dans la
+  // session, tous les utilisateurs sont redirigés vers l'accueil.
   if (user.role !== 'admin') {
     return <Navigate to="/" replace />
   }
