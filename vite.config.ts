@@ -10,8 +10,16 @@ export default defineConfig({
     setupFiles: ['./src/test/setup.ts'],
     coverage: {
       provider: 'v8',
-      include: ['src/**/*.{ts,tsx}'],
-      exclude: ['src/test/**', 'src/**/*.test.{ts,tsx}', 'src/**/*.d.ts'],
+      // `include` makes untested files under src count at 0%
+      include: ['src/**'],
+      exclude: [
+        'src/**/*.{test,spec}.*',
+        'src/**/*.d.ts',
+        'src/test/**',
+        'src/**/__generated__/**',
+        'src/**/*.generated.*',
+        'src/**/*.css',
+      ],
       reporter: ['text', 'lcov'],
     },
   },
