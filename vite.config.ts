@@ -20,7 +20,7 @@ export default defineConfig({
         'src/**/*.generated.*',
         'src/**/*.css',
       ],
-      reporter: ['text', 'lcov'],
+      reporter: ['text', 'lcov', 'json-summary', 'json'],
     },
   },
 })
