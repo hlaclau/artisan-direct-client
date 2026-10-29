@@ -18,6 +18,11 @@ export function Header() {
       <nav className="flex items-center gap-4">
         {user ? (
           <div className="flex items-center gap-4">
+            {user.role === 'admin' && (
+              <Link to="/admin" className="text-sm font-medium text-stone-900 hover:underline">
+                Espace admin
+              </Link>
+            )}
             <span className="text-sm text-stone-600">{user.email}</span>
             <button
               type="button"
